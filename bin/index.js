@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const app = express();
+const fs = require('fs');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -29,7 +30,7 @@ function askQuestion(query) {
 
 async function main() {
     while (exit> 0) {
-        const ans = await askQuestion("\nChe cosa si fa? ");
+        const ans = await askQuestion("\r\nChe cosa si fa? ");
         switch (ans) {
             case 'getUsers':
                 try {
@@ -48,6 +49,10 @@ async function main() {
             case '43U4':
                 const authResponse = await auth.getToken(auth.tokenRequest);
                 const site = await fetch.callApi(process.env.GRAPH_ENDPOINT + '/v1.0/sites/' + process.env.HOSTNAME + process.env.CLIENT43U4, authResponse.accessToken);
+                fs.appendFile("43U4.json", JSON.stringify(site, undefined), function(err, data) {
+                    if (err) throw err;
+                    console.log("salvato!");
+                });
                 console.log(site);
                 break;
             case 'q':
